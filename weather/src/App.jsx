@@ -16,6 +16,8 @@ function App() {
   const [city, setCity] = useState('Россия, Москва');
   const [weatherTemp, setWeatherTemp] = useState('');
   const [weatherCondition, setWeatherCondition] = useState('');
+  const [nightObjectClass, setNightOnjectClass] = useState('');
+  const [nightLogoClass, setNightLogoClass] = useState('')
 
   const weatherConditionStatic = [
     'Clear',
@@ -37,7 +39,7 @@ function App() {
 
 
   const getWeather = async (selectedCity) => {
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${selectedCity || city}`;
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${selectedCity || city}&lang=ru`;
     try {
       const response = await fetch(url);
 
@@ -92,8 +94,13 @@ function App() {
       const hours = currentTime.getHours();
       if (hours >= 0 && hours <= 5) {
         setCloudIconPath(moonLogo);
+        setNightOnjectClass(`object_night`);
+        setNightLogoClass(`cloudicon1 logo_night`);
+
       } else {
         setCloudIconPath(sunLogo);
+        setNightOnjectClass('object_day');
+        setNightLogoClass(`cloudicon1 logo_day`);
       };
 
       setAdditionalData(prev => prev + 1);
@@ -109,7 +116,7 @@ function App() {
   return (
     <>
       <div>
-        <div className="object">
+        <div className={nightObjectClass}>
           <div className="citys">
             <span>Страна и город:⠀
               <select id="country-city" onChange={changeCity} value={city}>
@@ -213,14 +220,19 @@ function App() {
 
           </div>
           <div className="localtime">
+            <span>
             {hours}:{minutes}:{seconds}
+            </span>
           </div>
           <div className="cloudicon">
-            <img className='cloudicon1' src={cloudIconPath} alt="" />
+            <img className={nightLogoClass} src={cloudIconPath} alt="" />
             <img src={setCloudIconPath} alt="" className="cloudicon2" />
           </div>
           <div className="temp">
             <span>{weatherTemp}</span>
+          </div>
+          <div className="condition">
+            <span>{weatherCondition}</span>
           </div>
         </div>
       </div>
